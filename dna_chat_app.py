@@ -161,7 +161,7 @@ if clinvar_file and dna_file:
                 """
                 name = str(row.get('Name', '')).upper()
                 # Regex to find patterns like "A>T" or "C>G" inside the Name
-                has_palindrome_name = re.search(r'[0-9](A>T|T>A|C>G|G>C)\W', name) is not None
+                has_palindrome_name = re.search(r'[0-9](A>T|T>A|C>G|G>C)', name) is not None
                 
                 # Also check strict columns
                 ref = str(row.get('ReferenceAllele', ''))
