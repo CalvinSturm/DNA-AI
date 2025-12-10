@@ -68,7 +68,7 @@ You need the "Variant Summary" file from NCBI.
 3.  Run the Streamlit app:
 
 ```bash
-streamlit run dna_chat_app.py --server.maxUploadSize=2000
+streamlit run main.py --server.maxUploadSize=2000
 ```
 
 ---
