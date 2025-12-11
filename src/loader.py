@@ -41,15 +41,30 @@ def load_dna_file(dna_file) -> pd.DataFrame:
     Parses user raw DNA file (23andMe/Ancestry format).
     """
     try:
+        # Read with flexible columns
         user_df = pd.read_csv(
             dna_file, 
             sep=r'\s+', 
             comment='#', 
             header=None,
-            names=['rsid', 'chrom', 'pos', 'genotype'],
             dtype=str, 
             on_bad_lines='skip'
         )
+
+        # Check for 5-column AncestryDNA format
+        if len(user_df.columns) == 5:
+            user_df.columns = ['rsid', 'chrom', 'pos', 'allele1', 'allele2']
+            user_df['genotype'] = user_df['allele1'].fillna('') + user_df['allele2'].fillna('')
+            user_df = user_df.drop(columns=['allele1', 'allele2'])
+        
+        # Assume 4-column format (23andMe)
+        elif len(user_df.columns) == 4:
+            user_df.columns = ['rsid', 'chrom', 'pos', 'genotype']
+
+        else:
+            st.error("Invalid file format. Please upload a valid 23andMe or AncestryDNA file.")
+            return pd.DataFrame()
+
     except Exception as e:
         st.error(f"Error reading DNA file: {e}")
         return pd.DataFrame()
